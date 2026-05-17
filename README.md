@@ -59,7 +59,7 @@ python run.py
 docker-compose up --build
 ```
 
-2. 访问应用：`http://localhost:5000`
+2. 访问应用：`http://localhost:22048`
 
 ## API 接口
 
@@ -77,5 +77,5 @@ docker-compose up --build
 | MYSQL_PORT | MySQL 端口 | 3306 |
 | MYSQL_USER | MySQL 用户 | root |
 | MYSQL_PASSWORD | MySQL 密码 | - |
-| MYSQL_DATABASE | 数据库名 | flask_app |
+| MYSQL_DATABASE | 数据库名 | design |
 | SECRET_KEY | Flask 密钥 | dev-secret-key |

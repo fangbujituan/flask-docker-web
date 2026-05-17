@@ -13,7 +13,7 @@ class Config:
     MYSQL_PORT = os.environ.get('MYSQL_PORT', 3306)
     MYSQL_USER = os.environ.get('MYSQL_USER', 'root')
     MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD', '')
-    MYSQL_DATABASE = os.environ.get('MYSQL_DATABASE', 'flask_app')
+    MYSQL_DATABASE = os.environ.get('MYSQL_DATABASE', 'design')
     
     SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
