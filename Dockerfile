@@ -17,5 +17,5 @@ COPY . .
 # Expose port
 EXPOSE 22048
 
-# Run the application
-CMD ["python", "run.py"]
+# Run the application with gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:22048", "run:app"]
