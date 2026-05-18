@@ -19,6 +19,7 @@ services:
       - /opt/vplatform/mysql_data:/var/lib/mysql
     ports:
       - "3306:3306"
+
   flask-app:
     build: .
     networks:
@@ -34,3 +35,14 @@ services:
       - SECRET_KEY=your_production_secret_key
     extra_hosts:
       - "host.docker.internal:host-gateway"
+
+  nginx:
+    build: ./client
+    container_name: nginx-frontend
+    restart: always
+    networks:
+      - vplatform_net
+    ports:
+      - "808:80"
+    depends_on:
+      - flask-app
