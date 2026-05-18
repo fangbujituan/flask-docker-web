@@ -21,7 +21,7 @@ services:
 
   flask-app:
     build: .
-    container_name: flask-docker-web-flask-app-1 # 改回你原先系统默认生成的或指定的容器名
+    container_name: flask-app
     networks:
       - vplatform_net
     ports:
