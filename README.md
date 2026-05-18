@@ -1,73 +1,156 @@
 # Flask MySQL Docker 项目
 
-一个简单的 Flask 应用，支持 MySQL 数据库和 Docker 部署。
+一个完整的 Flask 全栈应用，支持 MySQL 数据库和 Docker 部署。
 
 ## 项目结构
 
 ```
 .
-├── app/
-│   ├── __init__.py
-│   ├── models/
+├── app/                      # 后端应用
+│   ├── __init__.py           # 应用工厂
+│   ├── models/               # 数据模型
 │   │   ├── __init__.py
 │   │   └── user.py
-│   └── routes/
+│   └── routes/               # 路由蓝图
 │       ├── __init__.py
-│       ├── main.py
-│       └── api.py
-├── config.py
-├── run.py
-├── requirements.txt
-├── Dockerfile
-├── docker-compose.yml
-├── .env.example
+│       ├── main.py           # 主路由
+│       └── api.py            # API 接口
+├── client/                   # 前端应用（Vue 3）
+│   ├── src/
+│   │   ├── main.js           # 入口文件
+│   │   ├── App.vue           # 根组件
+│   │   ├── router/           # 路由配置
+│   │   └── views/            # 页面组件
+│   ├── index.html
+│   ├── vite.config.js
+│   └── package.json
+├── config.py                 # 配置文件
+├── run.py                    # 启动文件
+├── requirements.txt          # Python 依赖
+├── Dockerfile                # Docker 镜像构建
+├── docker-compose.yml        # Docker 编排
+├── .env.example              # 环境变量示例
 ├── .gitignore
 └── README.md
 ```
+
+## 技术栈
+
+**后端：**
+- Flask 3.0
+- Flask-SQLAlchemy
+- PyMySQL
+- Gunicorn
+
+**前端：**
+- Vue 3
+- Vue Router
+- Vite
+
+**数据库：**
+- MySQL 8.0
+
+**部署：**
+- Docker
+- Docker Compose
 
 ## 快速开始
 
 ### 本地开发
 
-1. 创建虚拟环境：
+**1. 后端**
+
 ```bash
+# 创建虚拟环境
 python -m venv venv
 source venv/bin/activate  # macOS/Linux
-# 或
-.\venv\Scripts\activate  # Windows
-```
 
-2. 安装依赖：
-```bash
+# 安装依赖
 pip install -r requirements.txt
-```
 
-3. 复制 `.env.example` 为 `.env` 并配置数据库：
-```bash
+# 配置环境变量
 cp .env.example .env
-```
+# 编辑 .env 文件，填入数据库配置
 
-4. 运行应用：
-```bash
+# 运行
 python run.py
 ```
 
+**2. 前端**
+
+```bash
+cd client
+
+# 安装依赖
+npm install
+
+# 运行开发服务器
+npm run dev
+```
+
+**3. 访问**
+
+- 前端：http://localhost:3000
+- 后端 API：http://localhost:22048
+
 ### Docker 部署
 
-1. 使用 Docker Compose 构建并运行：
+**1. 创建环境变量文件**
+
+```bash
+cat > .env << 'EOF'
+MYSQL_HOST=host.docker.internal
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=你的密码
+MYSQL_DATABASE=design
+SECRET_KEY=your_secret_key
+PORT=22048
+EOF
+```
+
+**2. 构建并启动**
+
 ```bash
 docker compose up -d --build
 ```
 
-2. 访问应用：`http://localhost:22048`
+**3. 查看日志**
+
+```bash
+docker compose logs -f
+```
+
+**4. 停止服务**
+
+```bash
+docker compose down
+```
 
 ## API 接口
 
-- `GET /` - 首页
-- `GET /health` - 健康检查
-- `GET /api/users` - 获取所有用户
-- `POST /api/users` - 创建新用户
-- `GET /api/users/<id>` - 获取指定用户
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | / | 首页 |
+| GET | /health | 健康检查 |
+| GET | /api/users | 获取所有用户 |
+| POST | /api/users | 创建用户 |
+| GET | /api/users/:id | 获取指定用户 |
+
+**创建用户示例：**
+
+```bash
+curl -X POST http://localhost:22048/api/users \
+  -H "Content-Type: application/json" \
+  -d '{"username": "test", "email": "test@example.com"}'
+```
+
+## 前端页面
+
+| 路径 | 说明 |
+|------|------|
+| / | 首页 |
+| /users | 用户列表 |
 
 ## 环境变量
 
@@ -77,5 +160,49 @@ docker compose up -d --build
 | MYSQL_PORT | MySQL 端口 | 3306 |
 | MYSQL_USER | MySQL 用户 | root |
 | MYSQL_PASSWORD | MySQL 密码 | - |
-| MYSQL_DATABASE | 数据库名 | design |
+| MYSQL_DATABASE | 数据库名 | flask_app |
 | SECRET_KEY | Flask 密钥 | dev-secret-key |
+| PORT | 应用端口 | 22048 |
+
+## 常用命令
+
+**后端：**
+
+```bash
+# 运行开发服务器
+python run.py
+
+# 使用 gunicorn 运行
+gunicorn --bind 0.0.0.0:22048 run:app
+```
+
+**前端：**
+
+```bash
+cd client
+
+# 开发
+npm run dev
+
+# 构建
+npm run build
+
+# 预览构建结果
+npm run preview
+```
+
+**Docker：**
+
+```bash
+# 构建并启动
+docker compose up -d --build
+
+# 查看日志
+docker compose logs -f
+
+# 重启
+docker compose restart
+
+# 停止并删除
+docker compose down
+```

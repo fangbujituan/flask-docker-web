@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from config import config
 
 db = SQLAlchemy()
@@ -12,6 +13,7 @@ def create_app(config_name='default'):
     
     # 初始化扩展
     db.init_app(app)
+    CORS(app)  # 启用 CORS 跨域支持
     
     # 注册蓝图
     from app.routes.main import main_bp

@@ -4,7 +4,7 @@ from datetime import datetime
 
 class User(db.Model):
     """用户模型"""
-    __tablename__ = 'users'
+    __tablename__ = 'flask-demo-users'
     
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
