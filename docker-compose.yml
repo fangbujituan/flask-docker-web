@@ -18,6 +18,12 @@ services:
       - /opt/vplatform/mysql_data:/var/lib/mysql
     ports:
       - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s   # 每 5 秒检查一次
+      timeout: 5s    # 超时时间 5 秒
+      retries: 5     # 重试 5 次（总共给 MySQL 留出约 25 秒的启动时间）
+      start_period: 10s # 容器启动后前 10 秒的失败不计入重试次数
 
   flask-app:
     build: .
@@ -35,6 +41,9 @@ services:
       - SECRET_KEY=your_production_secret_key
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    depends_on:
+      mysql-db:
+        condition: service_healthy # 严格依赖 mysql-db 的健康检查结果
     # 利用 Python 原生无依赖 socket 探测 22048 端口，确保 Flask 彻底启动
     healthcheck:
       test: ["CMD", "python3", "-c", "import socket; s = socket.socket(); s.connect(('127.0.0.1', 22048))"]
@@ -42,6 +51,7 @@ services:
       timeout: 3s
       retries: 3
       start_period: 5s
+    
 
   nginx:
     build: ./client
