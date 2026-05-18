@@ -45,4 +45,5 @@ services:
     ports:
       - "808:80"
     depends_on:
-      - flask-app
+      flask-app:
+        condition: service_healthy
