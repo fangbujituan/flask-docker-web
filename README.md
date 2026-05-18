@@ -56,7 +56,7 @@ python run.py
 
 1. 使用 Docker Compose 构建并运行：
 ```bash
-docker-compose up --build
+docker compose up -d --build
 ```
 
 2. 访问应用：`http://localhost:22048`

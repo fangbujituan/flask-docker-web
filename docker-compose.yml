@@ -1,8 +1,28 @@
 version: '3.8'
 
+networks:
+  vplatform_net:
+    driver: bridge
+
 services:
-  web:
+
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    networks:
+      - vplatform_net
+    environment:
+      MYSQL_ROOT_PASSWORD: 你的MySQL密码
+    # 数据持久化
+    volumes:
+      - /opt/vplatform/mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+  flask-app:
     build: .
+    networks:
+      - vplatform_net
     ports:
       - "22048:22048"
     environment:
